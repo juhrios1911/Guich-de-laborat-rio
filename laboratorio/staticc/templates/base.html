@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Lab 4 Femme | Gestão de Laboratório</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+    
+    </head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lilas: '#a78bfa',
+            menta: '#2dd4bf',
+            grafite: '#1e293b',
+          }
+        }
+      }
+    }
+</script>
+</head>
+<body class="text-slate-900">
+    <nav class="bg-white border-b border-slate-200 p-4 mb-8 shadow-sm">
+        <div class="container mx-auto flex justify-between items-center">
+             <img src="{{ url_for('static', filename='logo_lab.png') }}" alt="Logo Laboratório">
+            <h1 class="text-xl font-bold text-indigo-600 tracking-tight">LAB 4FEMME <span class="text-slate-400 font-light">PRO</span></h1> 
+            <div class="space-x-6 text-sm font-medium">
+                <a href="/" class="text-slate-600 hover:text-indigo-600 transition">Painel de Fila</a>
+                <a href="/relatorio" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition shadow-md">Relatório IA</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container mx-auto px-4">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

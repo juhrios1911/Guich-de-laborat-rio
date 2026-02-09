@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="bg-slate-900 p-10 text-white">
+            <h2 class="text-3xl font-bold mb-2 tracking-tight italic">Relatório de Fluxo IA 🤖</h2>
+            <p class="text-slate-400">Análise preditiva para otimização do laboratório.</p>
+        </div>
+        
+        <div class="p-10 space-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 bg-slate-50 rounded-2xl">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Status Geral</p>
+                    <p class="text-2xl font-black text-indigo-600">{{ ia.status }}</p>
+                </div>
+                <div class="p-6 bg-slate-50 rounded-2xl">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Espera Estimada</p>
+                    <p class="text-2xl font-black text-slate-800">{{ ia.tempo_estimado }}</p>
+                </div>
+                <div class="p-6 bg-amber-50 rounded-2xl border border-amber-100">
+                    <p class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-1">Sugestão</p>
+                    <p class="text-sm font-bold text-amber-700">Ajuste Imediato</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Média de Espera Real</p>
+                    <p class="text-2xl font-black text-indigo-700">{{ metricas.media_espera }} min</p>
+                </div>
+                <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Horário de Pico</p>
+                    <p class="text-2xl font-black text-indigo-700">{{ metricas.hora_pico }}</p>
+                </div>
+                <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Total Atendidos</p>
+                    <p class="text-2xl font-black text-indigo-700">{{ metricas.total }}</p>
+                </div>
+            </div>
+
+            <div class="bg-indigo-50 p-6 rounded-3xl border-2 border-dashed border-indigo-200 relative">
+                <span class="absolute -top-3 left-6 bg-indigo-600 text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase">Parecer Técnico</span>
+                <p class="text-indigo-900 leading-relaxed font-medium">"{{ ia.fluxo }} {{ ia.sugestao }}"</p>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-slate-800 mb-4 text-xl">Histórico Recente Detalhado</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-400 text-xs uppercase tracking-widest">
+                                <th class="py-3 border-b border-slate-100">Paciente</th>
+                                <th class="py-3 border-b border-slate-100">Serviço</th>
+                                <th class="py-3 border-b border-slate-100">Tipo</th>
+                                <th class="py-3 border-b border-slate-100 text-right">Espera</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in historico %}
+                            <tr class="border-b border-slate-50 text-sm hover:bg-slate-50 transition-colors">
+                                <td class="py-4 font-bold text-slate-700">{{ h.cliente }}</td>
+                                <td class="py-4 text-slate-500">{{ h.servico }}</td>
+                                <td class="py-4 text-slate-500">
+                                    <span class="px-2 py-1 rounded-md text-[10px] font-bold {{ 'bg-red-100 text-red-600' if h.tipo == 'Prioritario' else 'bg-slate-100 text-slate-600' }}">
+                                        {{ h.tipo }}
+                                    </span>
+                                </td>
+                                <td class="py-4 text-right font-mono font-bold text-indigo-600">{{ h.espera_min }} min</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

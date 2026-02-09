@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha do Paciente | {{ p.senha }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="ficha-container">
+        <div class="header">
+            <h1>FICHA LABORATORIAL</h1>
+            <div class="senha-badge">SENHA: {{ p.senha }}</div>
+        </div>
+
+        <div class="info-section">
+            <div class="campo">
+                <span class="label">Paciente</span>
+                <span class="valor">{{ p.nome }}</span>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div class="campo">
+                    <span class="label">CPF</span>
+                    <span class="valor">{{ p.cpf }}</span>
+                </div>
+                <div class="campo">
+                    <span class="label">Nascimento</span>
+                    <span class="valor">{{ p.nascimento }}</span>
+                </div>
+            </div>
+
+            <div class="campo">
+                <span class="label">Convênio / Plano</span>
+                <span class="valor">{{ p.convenio }} {% if p.carteirinha != 'N/A' %}(Nº {{ p.carteirinha }}){% endif %}</span>
+            </div>
+
+            <div class="campo">
+                <span class="label">Tipo de Coleta</span>
+                <span class="valor" style="color: var(--roxo-real); font-weight: bold;">{{ p.tipo_coleta }}</span>
+            </div>
+
+            <div class="campo" style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+                <span class="label">Exames Solicitados</span>
+                <div class="valor" style="font-size: 14px;">
+                    {% for exame in p.exames %}
+                        • {{ exame }}<br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="dna-detail"></div>
+
+        <div class="no-print" style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; gap: 10px;">
+                <button onclick="window.print()" style="flex: 1; background: #2ecc71; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    🖨️ Imprimir
+                </button>
+                <a href="/" style="flex: 1; background: var(--roxo-real); color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center;">
+                    ✅ Finalizar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Ajuste fino para o layout */
+        .info-section { text-align: left; }
+        .campo { margin-bottom: 15px; }
+        .label { font-size: 10px; text-transform: uppercase; color: #666; display: block; }
+        .valor { font-size: 16px; display: block; }
+        
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+            .ficha-container { border: 1px solid #ccc; box-shadow: none; margin: 0; }
+        }
+    </style>
+
+</body>
+</html>

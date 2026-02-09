@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 h-fit">
+        <h2 class="text-3xl font-extrabold mb-8 text-slate-800 tracking-tight">Triagem Digital</h2>
+        
+        <form action="/cadastrar" method="POST" class="space-y-8" id="formTriagem">
+            <div>
+                <label class="text-xs font-black uppercase text-slate-400 tracking-widest ml-1">Nome do Paciente</label>
+                <input type="text" name="nome" placeholder="Digite o nome completo" required 
+                class="w-full mt-2 p-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-menta focus:bg-white outline-none transition-all text-lg font-medium">
+            </div>
+
+            <div>
+                <label class="text-xs font-black uppercase text-slate-400 tracking-widest ml-1">Serviço/Exame</label>
+                <div class="relative mt-2">
+                    <select name="servico" required 
+                    class="w-full p-4 bg-slate-50 border-2 border-transparent rounded-2xl appearance-none cursor-pointer focus:border-lilas outline-none font-bold text-slate-700">
+                        <option value="" disabled selected>Escolha o procedimento...</option>
+                        <option value="Coleta">Coleta de Sangue</option>
+                        <option value="Urina">Coleta de Urina / fezes </option>
+                        <option value="Resultado"> Resultados de exames</option>
+                    </select>
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">▼</div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <label class="text-xs font-black uppercase text-slate-400 tracking-widest ml-1">Tipo de Chamada</label>
+                <div class="flex flex-col gap-4">
+                    <button type="button" onclick="selecionarTipo('Normal')" id="btnNormal" 
+                    class="flex-1 py-4 rounded-2xl border-2 border-slate-200 text-lg font-black transition-all hover:bg-slate-50">
+                        NORMAL
+                    </button>
+                    
+                    <button type="button" onclick="selecionarTipo('Prioritario')" id="btnPrio" 
+                    class="flex-1 py-4 rounded-2xl border-2 border-slate-200 text-lg font-black text-red-500 transition-all hover:bg-red-50">
+                        PRIORITÁRIO
+                    </button>
+                </div>
+                <input type="hidden" name="tipo" id="tipoInput" value="Normal">
+                <input type="hidden" name="subtipo" id="subtipoInput" value="">
+            </div>
+
+            <div id="subOpcoesPrio" class="hidden grid grid-cols-2 gap-3 animate-slideUp">
+                <button type="button" onclick="setSubTipo('Idoso')" class="p-3 bg-slate-100 rounded-xl text-sm font-bold text-slate-600 hover:bg-red-500 hover:text-white transition-colors">👴 Idoso</button>
+                <button type="button" onclick="setSubTipo('Gestante')" class="p-3 bg-slate-100 rounded-xl text-sm font-bold text-slate-600 hover:bg-red-500 hover:text-white transition-colors">🤰 Gestante</button>
+                <button type="button" onclick="setSubTipo('PCD')" class="p-3 bg-slate-100 rounded-xl text-sm font-bold text-slate-600 hover:bg-red-500 hover:text-white transition-colors">♿ Especial</button>
+                <button type="button" onclick="setSubTipo('Criança')" class="p-3 bg-slate-100 rounded-xl text-sm font-bold text-slate-600 hover:bg-red-500 hover:text-white transition-colors">👶 Criança</button>
+            </div>
+
+            <button type="submit" class="w-full bg-grafite text-white py-5 rounded-2xl font-black text-xl hover:bg-lilas transition-all shadow-2xl mt-4">
+                GERAR SENHA
+            </button>
+        </form>
+    </div>
+
+    <div class="lg:col-span-2">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                Painel de Chamadas <span class="bg-menta text-white text-[10px] px-2 py-1 rounded-lg animate-pulse">AO VIVO</span>
+            </h2>
+            <span class="text-slate-400 text-sm font-medium">Total na fila: {{ fila|length }}</span>
+        </div>
+
+        <div class="space-y-4">
+            {% for p in fila %}
+            <div class="p-6 rounded-[2rem] border-2 shadow-sm flex justify-between items-center transition-all hover:translate-x-2 
+                {{ 'bg-red-50 border-red-200' if p.tipo == 'Prioritario' else 'bg-white border-slate-100' }}">
+                
+                <div class="flex items-center gap-6">
+                    <div class="h-16 w-16 rounded-2xl flex flex-col items-center justify-center shadow-inner 
+                        {{ 'bg-red-500 text-white' if p.tipo == 'Prioritario' else 'bg-menta text-white' }}">
+                        <span class="text-[10px] font-bold uppercase opacity-80">Posição</span>
+                        <span class="text-2xl font-black">{{ loop.index }}</span>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2 py-0.5 bg-slate-200 text-slate-600 rounded text-[10px] font-black uppercase">{{ p.servico }}</span>
+                            {% if p.status_aging == 'Promovido (Demora)' %}
+                                <span class="px-2 py-0.5 bg-amber-500 text-white rounded text-[10px] font-black uppercase">⏰ Espera Longa</span>
+                            {% endif %}
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">{{ p.nome }}</h3>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <div class="text-right">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Chegada</p>
+                        <p class="text-sm font-black text-slate-600">{{ p.chegada }}</p>
+                    </div>
+                    {% if loop.first %}
+                        <a href="/atender/0" class="bg-grafite text-white px-8 py-3 rounded-2xl font-bold hover:bg-lilas transition-all shadow-md">CHAMAR</a>
+                    {% else %}
+                        <span class="text-slate-300 font-bold text-xs uppercase px-4">Aguardando</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-white rounded-3xl p-20 text-center border-2 border-dashed border-slate-200">
+                <div class="text-5xl mb-4"></div>
+                <p class="text-slate-400 font-bold text-lg">Nenhum paciente na fila no momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function selecionarTipo(tipo) {
+    const btnN = document.getElementById('btnNormal');
+    const btnP = document.getElementById('btnPrio');
+    const sub = document.getElementById('subOpcoesPrio');
+    document.getElementById('tipoInput').value = tipo;
+
+    if(tipo === 'Prioritario') {
+        btnP.classList.add('bg-red-500', 'text-white', 'border-red-500');
+        btnN.classList.remove('bg-menta', 'text-white', 'border-menta');
+        btnN.classList.add('bg-transparent', 'text-slate-400');
+        sub.classList.remove('hidden');
+    } else {
+        btnN.classList.add('bg-menta', 'text-white', 'border-menta');
+        btnP.classList.remove('bg-red-500', 'text-white', 'border-red-500');
+        btnP.classList.add('bg-transparent', 'text-red-500');
+        sub.classList.add('hidden');
+        document.getElementById('subtipoInput').value = ""; 
+    }
+}
+
+function setSubTipo(sub) {
+    document.getElementById('subtipoInput').value = sub;
+    const botoes = document.querySelectorAll('#subOpcoesPrio button');
+    botoes.forEach(b => {
+        b.classList.remove('bg-red-500', 'text-white');
+        b.classList.add('bg-slate-100', 'text-slate-600');
+    });
+    event.currentTarget.classList.remove('bg-slate-100', 'text-slate-600');
+    event.currentTarget.classList.add('bg-red-500', 'text-white');
+}
+</script>
+{% endblock %}

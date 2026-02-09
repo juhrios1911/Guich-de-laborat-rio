@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+
+:root {
+    --lilas: #a78bfa;          /* Cor Principal */
+    --lilas-hover: #8b5cf6;
+    --menta: #2dd4bf;         /* Cor Secundária / Sucesso */
+    --grafite: #1e293b;       /* Cor de Contraste */
+    --prioridade: #f43f5e;    /* Vermelho vibrante para emergências */
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #d1c4d9 !important; /* O !important força a aplicação */
+    color: var(--grafite);
+}
+
+/* --- Ajustes de Cores nas Classes do Tailwind --- */
+.text-indigo-600 { color: var(--lilas) !important; }
+.bg-indigo-600 { background-color: var(--lilas) !important; }
+.bg-indigo-700:hover { background-color: var(--lilas-hover) !important; }
+.bg-slate-900 { background-color: var(--grafite) !important; }
+.border-indigo-200 { border-color: #ddd6fe !important; }
+.bg-indigo-50 { background-color: #f5f3ff !important; }
+
+/* --- Animações --- */
+.grid > div, .space-y-4 > div {
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Cards e Inputs --- */
+input, select {
+    transition: all 0.3s ease;
+    border: 2px solid transparent !important;
+}
+
+input:focus, select:focus {
+    border-color: var(--menta) !important; /* Foco em Verde Menta */
+    background-color: white !important;
+    box-shadow: 0 10px 20px -5px rgba(45, 212, 191, 0.2);
+}
+
+/* Estilo para o Card de Prioridade */
+.bg-red-50 {
+    background-color: #fff1f2 !important;
+    position: relative;
+    overflow: hidden;
+    border-left: 6px solid var(--prioridade) !important;
+}
+
+/* Estilo para o Card Normal - Usando Menta */
+.bg-white.border-slate-100 {
+    border-left: 6px solid var(--menta);
+}
+
+/* Botões com efeito moderno */
+button[type="submit"] {
+    background: linear-gradient(135deg, var(--lilas), var(--lilas-hover));
+    transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(167, 139, 250, 0.4);
+}
+
+/* Badge da IA com efeito de vidro e pulso Lilás */
+.bg-indigo-600.text-white.text-\[10px\] {
+    animation: pulseLilas 2s infinite;
+    background-color: var(--lilas) !important;
+}
+
+@keyframes pulseLilas {
+    0% { box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(167, 139, 250, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(167, 139, 250, 0); }
+}
+
+/* Customização da Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb {
+    background: var(--lilas);
+    border-radius: 10px;
+}
+/* COLE NO FINAL DO SEU STYLE.CSS */
+:root {
+    --roxo-real: #5D3272;
+    --dourado: #D4AF37;
+    --prata: #C0C0C0;
+}
+
+.ficha-container {
+    background: white;
+    max-width: 450px;
+    margin: 50px auto; /* Centraliza a ficha na tela */
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid var(--roxo-real);
+    box-shadow: 10px 10px 0px var(--roxo-real);
+}
+
+.senha-badge {
+    background-color: var(--dourado);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.info-section .campo { margin-bottom: 15px; text-align: left; }
+.info-section .label { display: block; font-size: 10px; font-weight: 800; color: var(--roxo-real); text-transform: uppercase; }
+.info-section .valor { display: block; font-size: 18px; color: #333; }
+
+.dna-detail {
+    height: 6px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--menta) 25%, var(--roxo-real) 25%, var(--roxo-real) 50%, var(--menta) 50%, var(--menta) 75%, var(--roxo-real) 75%);
+    background-size: 40px 100%;
+    margin-top: 25px;
+}
